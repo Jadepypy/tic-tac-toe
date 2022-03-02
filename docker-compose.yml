@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  postgres:
+    build: ./sqls
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: user1
+      POSTGRES_DB: game
+    ports:
+      - "5434:5432"
+  tic_tac_toe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+      - "3000:3000"
+    command:  bash -c "go run server/main.go server/main_grpc.go"
+
+
+
+

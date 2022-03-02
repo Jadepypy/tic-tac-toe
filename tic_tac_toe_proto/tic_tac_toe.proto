@@ -1,0 +1,31 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package tic_tac_toe;
+
+option go_package="./tic_tac_toe_proto/;tic_tac_toe_proto";
+
+service Player {
+      rpc Play(PlayerMove) returns (google.protobuf.Empty) {}
+      rpc GetBoard(google.protobuf.Empty) returns (GameState) {}
+      rpc GetRecords(google.protobuf.Empty) returns (Records) {}
+    }
+
+message Record {
+  optional int32 state = 1;
+  optional int32 player = 2;
+}
+
+message Records {
+  repeated Record recordList = 1;
+}
+
+message PlayerMove {
+  int32 x_index = 1;
+  int32 y_index = 2;
+}
+
+message GameState {
+  repeated string board = 1;
+  int32 state = 2;
+  int32 turn = 3;
+}

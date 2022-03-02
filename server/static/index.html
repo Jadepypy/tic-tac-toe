@@ -114,15 +114,16 @@
                 body: JSON.stringify({x_index: (id-1) % 3, y_index: Math.floor((id - 1)/ 3)})
             });
             const data = await res.json()
-            if(data["game_state"] == GAME_STATE.Invalid) return
+
+            if(data["State"] == GAME_STATE.Invalid) return
 
             e.innerHTML = players[gameTurn].symbol
 
-            if(data["game_state"] == GAME_STATE.Ongoing){
-                message.innerHTML = `Player ${players[data["player"]].id}'s Turn`
-                gameTurn = Number(data["player"])
-            } else if (data["game_state"] == GAME_STATE.Win){
-                message.innerHTML = `Player ${players[data["player"]].id} has won!`
+            if(data["State"] == GAME_STATE.Ongoing){
+                message.innerHTML = `Player ${players[data["Player"]].id}'s Turn`
+                gameTurn = Number(data["Player"])
+            } else if (data["State"] == GAME_STATE.Win){
+                message.innerHTML = `Player ${players[data["Player"]].id} has won!`
                 gameState = GAME_STATE.Win
             } else {
                 message.innerHTML = `Draw!`

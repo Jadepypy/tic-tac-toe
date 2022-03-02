@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tic_tac_toe/controller"
+	"tic_tac_toe/server/controller"
+	"tic_tac_toe/server/entity"
 )
 
 var (
@@ -12,11 +13,12 @@ var (
 )
 
 func main() {
+	go MainGRPC()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("./server/static/*")
 
-	//r.Static("/static", "./public")
+	//r.Static("/static", "./static")
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", nil)
 	})
@@ -33,8 +35,13 @@ func main() {
 		ctx.Status(200)
 	})
 	router.POST("/play", func(ctx *gin.Context) {
-		result, err := gameController.Play(ctx)
+		var playerMove entity.PlayerMove
+		err := ctx.ShouldBindJSON(&playerMove)
 		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		result, err1 := gameController.Play(playerMove.XIndex, playerMove.YIndex)
+		if err1 != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
 		ctx.JSON(200, result)

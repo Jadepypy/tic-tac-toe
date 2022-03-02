@@ -5,6 +5,11 @@ type PlayerMove struct {
 	YIndex int `json:"y_index" binding:"min=0,max=2"`
 }
 
+type GameState struct {
+	Player int
+	State  int
+}
+
 type Game struct {
 	GameBoard Board
 	GameScore Score
